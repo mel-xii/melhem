@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MELHEM | Functional Luxury</title>
+    <meta name="description" content="MELHEM produces limited, functional luxury objects for high-responsibility individuals.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>M</text></svg>">
+    
+    <style>
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        
+        .loading-screen.loaded {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .brand-word {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            color: #f8f5f0;
+            position: relative;
+        }
+        
+        .brand-word::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #f8f5f0, transparent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        /* Fixed Header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .brand-logo {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #f8f5f0;
+            text-decoration: none;
+            letter-spacing: -0.01em;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+        }
+        
+        .nav-link {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: #e8e8e8;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #f8f5f0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: #f8f5f0;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .mobile-menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 1px;
+            background-color: #f8f5f0;
+            margin: 5px 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        /* Video Hero Section */
+        .video-hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        .hero-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.8), rgba(10,10,10,0.9));
+            z-index: -1;
+        }
+        
+        .hero-content {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-text {
+            max-width: 800px;
+        }
+        
+        .hero-title {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: #f8f5f0;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #e8e8e8;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            font-weight: 300;
+        }
+        
+        .emphasis-text {
+            font-style: italic;
+            color: #1a3a2a;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        .scroll-indicator span {
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        
+        .scroll-indicator svg {
+            fill: #e8e8e8;
+            opacity: 0.6;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+        
+        /* Customer Registration */
+        .registration-section {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.95), rgba(26, 26, 26, 0.9));
+            padding: 6rem 2rem;
+        }
+        
+        .registration-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .registration-form {
+            margin-top: 3rem;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e8e8e8;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #f8f5f0;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1a3a2a;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: #1a3a2a;
+            color: #f8f5f0;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .submit-button:hover {
+            background: #2a4a35;
+        }
+        
+        .submit-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .form-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .form-message.success {
+            background: rgba(46,125,50,0.1);
+            border: 1px solid #2e7d32;
+            color: #a5d6a7;
+        }
+        
+        .form-message.error {
+            background: rgba(211,47,47,0.1);
+            border: 1px solid #d32f2f;
+            color: #ff8a8a;
+        }
+        
+        /* Login Toggle */
+        .login-toggle {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .toggle-link {
+            color: #1a3a2a;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .toggle-link:hover {
+            text-decoration: underline;
+        }
+        
+        .login-form {
+            display: none;
+        }
+        
+        /* Customer Dashboard */
+        .customer-dashboard {
+            display: none;
+            margin-top: 3rem;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .welcome-message {
+            font-size: 1.2rem;
+            color: #f8f5f0;
+        }
+        
+        .logout-button {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #e8e8e8;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .dashboard-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2rem;
+        }
+        
+        .dashboard-card h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #f8f5f0;
+        }
+        
+        .inquiry-item {
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1rem;
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .inquiry-product {
+            font-weight: 500;
+            color: #f8f5f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .inquiry-status {
+            font-size: 0.8rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            background: rgba(255,193,7,0.1);
+            color: #ffd54f;
+            border: 1px solid #ffb300;
+        }
+        
+        .status-reviewed {
+            background: rgba(33,150,243,0.1);
+            color: #64b5f6;
+            border: 1px solid #2196f3;
+        }
+        
+        .status-approved {
+            background: rgba(76,175,80,0.1);
+            color: #81c784;
+            border: 1px solid #4caf50;
+        }
+        
+        /* Main Sections */
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem;
+        }
+        
+        .dark-section {
+            background-color: #1a1a1a;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(42, 42, 42, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(42, 42, 42, 0.1) 0%, transparent 50%);
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .section-title {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            margin-bottom: 3rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: #f8f5f0;
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #e8e8e8;
+            margin-bottom: 4rem;
+            font-weight: 300;
+        }
+        
+        /* Brand Grid */
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+        
+        .brand-item {
+            position: relative;
+        }
+        
+        .brand-number {
+            font-family: 'Crimson Text', serif;
+            font-size: 1rem;
+            color: #1a3a2a;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .brand-item h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: #f8f5f0;
+        }
+        
+        .brand-item p {
+            color: #e8e8e8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        /* Philosophy */
+        .philosophy-content {
+            max-width: 900px;
+        }
+        
+        .philosophy-quote {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #f8f5f0;
+            margin: 3rem 0 5rem;
+            padding-left: 2rem;
+            border-left: 1px solid #1a3a2a;
+        }
+        
+        .philosophy-points {
+            display: grid;
+            gap: 3rem;
+        }
+        
+        .point h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: #f8f5f0;
+        }
+        
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+        
+        .product-card {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .product-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .product-image {
+            height: 250px;
+            background: #2a2a2a;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 2rem;
+        }
+        
+        .product-name {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            color: #f8f5f0;
+        }
+        
+        .product-tagline {
+            font-size: 1rem;
+            color: #e8e8e8;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .product-status {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: #1a3a2a;
+            letter-spacing: 0.05em;
+        }
+        
+        .product-status.closed {
+            color: #e8e8e8;
+            opacity: 0.5;
+        }
+        
+        .text-link {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .text-link:hover {
+            color: #f8f5f0;
+        }
+        
+        /* Founder Section */
+        .founder-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 6rem;
+            align-items: start;
+        }
+        
+        .founder-image-container {
+            position: relative;
+        }
+        
+        .founder-image-placeholder {
+            aspect-ratio: 3/4;
+            background: #2a2a2a;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .founder-name {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin: 1rem 0 2rem;
+            color: #f8f5f0;
+        }
+        
+        .founder-quote p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e8e8e8;
+        }
+        
+        .founder-credentials {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #e8e8e8;
+            opacity: 0.7;
+        }
+        
+        /* Archive Grid */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .archive-card {
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+        
+        .archive-card:hover {
+            opacity: 0.8;
+        }
+        
+        /* Contact Section */
+        .contact-content {
+            max-width: 800px;
+        }
+        
+        .contact-description {
+            font-size: 1.2rem;
+            color: #e8e8e8;
+            margin-bottom: 4rem;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .contact-item h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            color: #f8f5f0;
+        }
+        
+        .contact-link {
+            display: block;
+            font-size: 1.1rem;
+            color: #e8e8e8;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-link:hover {
+            color: #f8f5f0;
+        }
+        
+        .contact-item p {
+            font-size: 0.9rem;
+            color: #e8e8e8;
+            opacity: 0.7;
+            line-height: 1.4;
+        }
+        
+        .contact-notice {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #e8e8e8;
+            opacity: 0.5;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 4rem 2rem;
+            background-color: #0a0a0a;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .footer-brand {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            color: #f8f5f0;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+        
+        .footer-links a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #f8f5f0;
+        }
+        
+        .footer-copyright {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #e8e8e8;
+            opacity: 0.5;
+        }
+        
+        .footer-disclaimer {
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            line-height: 1.4;
+        }
+        
+        /* Customer Account Button */
+        .account-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: #1a3a2a;
+            color: #f8f5f0;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .account-button:hover {
+            background: #2a4a35;
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .founder-content {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .footer-links {
+                order: 2;
+            }
+            
+            .footer-copyright {
+                order: 3;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            section {
+                padding: 6rem 1.5rem;
+            }
+            
+            .fixed-header {
+                padding: 1.5rem 1.5rem;
+            }
+            
+            .nav-menu {
+                display: none;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: #0a0a0a;
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .mobile-menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(6px, 6px);
+            }
+            
+            .mobile-menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .mobile-menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
+            
+            .brand-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .philosophy-quote {
+                font-size: 1.5rem;
+                padding-left: 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .account-button {
+                bottom: 1rem;
+                right: 1rem;
+                font-size: 0.8rem;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <h1 class="brand-word">MELHEM</h1>
+        </div>
+    </div>
+
+    <!-- Fixed Header -->
+    <header class="fixed-header" id="mainHeader">
+        <nav class="nav-container">
+            <a href="#intro" class="brand-logo">MELHEM</a>
+            <ul class="nav-menu">
+                <li><a href="#brand-identity" class="nav-link">Brand</a></li>
+                <li><a href="#philosophy" class="nav-link">Philosophy</a></li>
+                <li><a href="#products" class="nav-link">Objects</a></li>
+                <li><a href="#founder" class="nav-link">Founder</a></li>
+                <li><a href="#registration" class="nav-link">Register</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Video Hero Section -->
+    <section id="intro" class="video-hero">
+        <video autoplay muted loop playsinline class="hero-video" id="heroVideo">
+            <source src="videos/hero-bg.mp4" type="video/mp4">
+            <source src="videos/hero-bg-loop.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-video-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2 class="hero-title">Objects of<br><span class="emphasis-text">Responsibility</span></h2>
+                <p class="hero-subtitle">Limited edition functional pieces for those who bear significant responsibility.</p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <svg width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 16L7 11 8.4 9.6 12 13.2 15.6 9.6 17 11z"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Customer Account Button -->
+    <button class="account-button" id="accountButton">Customer Account</button>
+
+    <main>
+        <!-- Brand Identity -->
+        <section id="brand-identity" class="section" data-nav-index="1">
+            <div class="section-container">
+                <h2 class="section-title">Brand Identity</h2>
+                <div class="brand-grid">
+                    <div class="brand-item">
+                        <div class="brand-number">01</div>
+                        <h3>Function First</h3>
+                        <p>Every object serves a distinct, necessary purpose. Ornament follows utility.</p>
+                    </div>
+                    <div class="brand-item">
+                        <div class="brand-number">02</div>
+                        <h3>Limited Editions</h3>
+                        <p>We produce in strictly limited quantities, ensuring each piece remains exclusive.</p>
+                    </div>
+                    <div class="brand-item">
+                        <div class="brand-number">03</div>
+                        <h3>Sustainable Legacy</h3>
+                        <p>Materials are selected for durability, with repair services available indefinitely.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Philosophy -->
+        <section id="philosophy" class="section dark-section" data-nav-index="2">
+            <div class="section-container">
+                <div class="philosophy-content">
+                    <div class="philosophy-text">
+                        <h2 class="section-title">Philosophy</h2>
+                        <blockquote class="philosophy-quote">
+                            <p>In an era of disposable excess, we believe in creating fewer, better objects that endure and serve.</p>
+                        </blockquote>
+                        <div class="philosophy-points">
+                            <div class="point">
+                                <h3>Intentionality</h3>
+                                <p>Each object undergoes months of refinement to ensure it performs its singular function flawlessly.</p>
+                            </div>
+                            <div class="point">
+                                <h3>Scarcity as Integrity</h3>
+                                <p>By limiting production, we maintain quality control and ensure each piece retains its value.</p>
+                            </div>
+                            <div class="point">
+                                <h3>Silent Confidence</h3>
+                                <p>Our objects communicate through performance, not appearance. They are recognized by those who know.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="section" data-nav-index="3">
+            <div class="section-container">
+                <h2 class="section-title">Current Objects</h2>
+                <p class="section-subtitle">Available in limited quantities</p>
+                
+                <div class="products-grid" id="productsGrid">
+                    <!-- Product cards loaded by JavaScript -->
+                </div>
+                
+                <div class="section-footer">
+                    <a href="#archive" class="text-link">View archive of closed editions →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Founder Section -->
+        <section id="founder" class="section dark-section" data-nav-index="4">
+            <div class="section-container">
+                <div class="founder-content">
+                    <div class="founder-image-container">
+                        <div class="founder-image-placeholder">
+                            <!-- Founder image would be here -->
+                        </div>
+                    </div>
+                    <div class="founder-text">
+                        <h2 class="section-title">Founder</h2>
+                        <h3 class="founder-name">Alexander Melhem</h3>
+                        <div class="founder-quote">
+                            <p>"I started MELHEM after fifteen years designing equipment for aerospace and medical fields. I noticed that the objects we rely on for critical tasks were either purely utilitarian or purely decorative.</p>
+                            <p>There was a space between: objects that perform essential functions with uncompromising reliability, while embodying the restraint and quality of true luxury.</p>
+                            <p>Our clients are individuals who make decisions affecting many lives and substantial resources. They need tools that won't fail, that communicate seriousness, and that don't distract. That's what we build."</p>
+                        </div>
+                        <div class="founder-credentials">
+                            <p>Former lead engineer at Kronos Aerospace<br>
+                            Advisor to multiple security and logistics firms</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Registration Section -->
+        <section id="registration" class="section registration-section" data-nav-index="5">
+            <div class="section-container">
+                <div class="registration-container">
+                    <h2 class="section-title">Customer Registration</h2>
+                    <p class="section-subtitle">Register interest or create an account to track inquiries</p>
+                    
+                    <!-- Registration Form -->
+                    <div class="registration-form" id="registrationForm">
+                        <div class="form-group">
+                            <label for="regName">Full Name *</label>
+                            <input type="text" id="regName" placeholder="John Smith" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="regEmail">Email Address *</label>
+                                <input type="email" id="regEmail" placeholder="john@example.com" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regPhone">Phone Number</label>
+                                <input type="tel" id="regPhone" placeholder="+1 (555) 123-4567">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regCompany">Company / Organization</label>
+                            <input type="text" id="regCompany" placeholder="Acme Corporation">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regTitle">Title / Position</label>
+                            <input type="text" id="regTitle" placeholder="CEO / Director">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regInterest">Primary Interest</label>
+                            <select id="regInterest">
+                                <option value="">Select an option</option>
+                                <option value="acquisition">Product Acquisition</option>
+                                <option value="collaboration">Corporate Collaboration</option>
+                                <option value="investment">Investment Inquiry</option>
+                                <option value="information">General Information</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regPassword">Create Password (for account)</label>
+                            <input type="password" id="regPassword" placeholder="Minimum 8 characters">
+                        </div>
+                        
+                        <button class="submit-button" id="registerButton">Register Interest</button>
+                        
+                        <div class="form-message" id="regMessage"></div>
+                        
+                        <div class="login-toggle">
+                            <p>Already registered? <span class="toggle-link" id="showLogin">Login to your account</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <div class="registration-form login-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input type="email" id="loginEmail" placeholder="john@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        </div>
+                        
+                        <button class="submit-button" id="loginButton">Login</button>
+                        
+                        <div class="form-message" id="loginMessage"></div>
+                        
+                        <div class="login-toggle">
+                            <p>Don't have an account? <span class="toggle-link" id="showRegister">Register here</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer Dashboard -->
+                    <div class="customer-dashboard" id="customerDashboard">
+                        <div class="dashboard-header">
+                            <div class="welcome-message" id="welcomeMessage">Welcome back, John</div>
+                            <button class="logout-button" id="logoutButton">Logout</button>
+                        </div>
+                        
+                        <div class="dashboard-grid">
+                            <div class="dashboard-card">
+                                <h3>Your Inquiries</h3>
+                                <div id="customerInquiries">
+                                    <!-- Inquiries loaded here -->
+                                </div>
+                            </div>
+                            
+                            <div class="dashboard-card">
+                                <h3>Account Information</h3>
+                                <div id="accountInfo">
+                                    <!-- Account info loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Archive Section -->
+        <section id="archive" class="section" data-nav-index="6">
+            <div class="section-container">
+                <h2 class="section-title">Archive</h2>
+                <p class="section-subtitle">Closed editions</p>
+                
+                <div class="archive-grid" id="archiveGrid">
+                    <!-- Archive items loaded by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section dark-section" data-nav-index="7">
+            <div class="section-container">
+                <div class="contact-content">
+                    <h2 class="section-title">Contact</h2>
+                    <p class="contact-description">Inquiries are handled personally and confidentially.</p>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <h3>Acquisition Inquiries</h3>
+                            <a href="mailto:acquisition@melhem.com" class="contact-link">acquisition@melhem.com</a>
+                            <p>For questions regarding availability and acquisition process.</p>
+                        </div>
+                        <div class="contact-item">
+                            <h3>Client Services</h3>
+                            <a href="mailto:service@melhem.com" class="contact-link">service@melhem.com</a>
+                            <p>For existing clients requiring maintenance or consultation.</p>
+                        </div>
+                        <div class="contact-item">
+                            <h3>Corporate</h3>
+                            <a href="mailto:corporate@melhem.com" class="contact-link">corporate@melhem.com</a>
+                            <p>For institutional or corporate inquiries.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-notice">
+                        <p>We respond to serious inquiries within 24 hours. All communications are confidential.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">MELHEM</div>
+            <div class="footer-links">
+                <a href="admin.html" style="color: #1a3a2a;">Admin</a>
+                <a href="#philosophy">Philosophy</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-copyright">
+                <p>© <span id="currentYear"></span> MELHEM. All rights reserved.</p>
+                <p class="footer-disclaimer">Objects shown are representative. Specifications subject to minor changes during production.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize loading screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                if (loadingScreen) {
+                    loadingScreen.classList.add('loaded');
+                    
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 600);
+                }
+            }, 1800);
+            
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Mobile menu toggle
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (mobileMenuToggle && navMenu) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                
+                // Close mobile menu when clicking a link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenuToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Header hide/show on scroll
+            let lastScrollTop = 0;
+            const header = document.getElementById('mainHeader');
+            
+            if (header) {
+                window.addEventListener('scroll', function() {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (scrollTop > lastScrollTop && scrollTop > 100) {
+                        header.style.transform = 'translateY(-100%)';
+                    } else {
+                        header.style.transform = 'translateY(0)';
+                    }
+                    
+                    lastScrollTop = scrollTop;
+                });
+            }
+            
+            // Account button click
+            const accountButton = document.getElementById('accountButton');
+            if (accountButton) {
+                accountButton.addEventListener('click', function() {
+                    const registrationSection = document.getElementById('registration');
+                    if (registrationSection) {
+                        window.scrollTo({
+                            top: registrationSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Check if user is logged in
+                        if (localStorage.getItem('melhem_customer_logged_in')) {
+                            showCustomerDashboard();
+                        } else {
+                            showLoginForm();
+                        }
+                    }
+                });
+            }
+            
+            // Check if customer is logged in
+            checkCustomerLogin();
+            
+            // Customer registration/login functionality
+            setupCustomerAuth();
+        });
+        
+        // Customer Authentication System
+        function setupCustomerAuth() {
+            // Show login form
+            document.getElementById('showLogin')?.addEventListener('click', function() {
+                document.getElementById('registrationForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+            });
+            
+            // Show registration form
+            document.getElementById('showRegister')?.addEventListener('click', function() {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registrationForm').style.display = 'block';
+            });
+            
+            // Register button
+            document.getElementById('registerButton')?.addEventListener('click', function() {
+                registerCustomer();
+            });
+            
+            // Login button
+            document.getElementById('loginButton')?.addEventListener('click', function() {
+                loginCustomer();
+            });
+            
+            // Logout button
+            document.getElementById('logoutButton')?.addEventListener('click', function() {
+                logoutCustomer();
+            });
+        }
+        
+        function registerCustomer() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const company = document.getElementById('regCompany').value;
+            const title = document.getElementById('regTitle').value;
+            const interest = document.getElementById('regInterest').value;
+            const password = document.getElementById('regPassword').value;
+            
+            // Validation
+            if (!name || !email) {
+                showMessage('regMessage', 'Please fill in all required fields', 'error');
+                return;
+            }
+            
+            if (password && password.length < 8) {
+                showMessage('regMessage', 'Password must be at least 8 characters', 'error');
+                return;
+            }
+            
+            // Get existing customers
+            const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+            
+            // Check if email already exists
+            if (customers.some(c => c.email === email)) {
+                showMessage('regMessage', 'Email already registered. Please login instead.', 'error');
+                return;
+            }
+            
+            // Create customer object
+            const customer = {
+                id: generateId(),
+                name: name,
+                email: email,
+                phone: phone || '',
+                company: company || '',
+                title: title || '',
+                interest: interest || '',
+                password: password ? btoa(password) : '', // Simple encoding (not secure for production)
+                registrationDate: new Date().toISOString(),
+                status: 'active',
+                inquiries: []
+            };
+            
+            // Save customer
+            customers.push(customer);
+            localStorage.setItem('melhem_customers', JSON.stringify(customers));
+            
+            // Login customer
+            localStorage.setItem('melhem_customer_logged_in', JSON.stringify({
+                email: email,
+                name: name,
+                timestamp: Date.now()
+            }));
+            
+            showMessage('regMessage', 'Registration successful! Welcome to MELHEM.', 'success');
+            
+            // Show dashboard
+            setTimeout(() => {
+                showCustomerDashboard();
+            }, 1500);
+        }
+        
+        function loginCustomer() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Validation
+            if (!email || !password) {
+                showMessage('loginMessage', 'Please enter email and password', 'error');
+                return;
+            }
+            
+            // Get customers
+            const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+            
+            // Find customer
+            const customer = customers.find(c => c.email === email && btoa(password) === c.password);
+            
+            if (!customer) {
+                showMessage('loginMessage', 'Invalid email or password', 'error');
+                return;
+            }
+            
+            // Login customer
+            localStorage.setItem('melhem_customer_logged_in', JSON.stringify({
+                email: email,
+                name: customer.name,
+                timestamp: Date.now()
+            }));
+            
+            showMessage('loginMessage', 'Login successful!', 'success');
+            
+            // Show dashboard
+            setTimeout(() => {
+                showCustomerDashboard();
+            }, 1000);
+        }
+        
+        function logoutCustomer() {
+            localStorage.removeItem('melhem_customer_logged_in');
+            
+            // Hide dashboard, show registration form
+            document.getElementById('customerDashboard').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registrationForm').style.display = 'block';
+            
+            // Update account button
+            const accountButton = document.getElementById('accountButton');
+            if (accountButton) {
+                accountButton.textContent = 'Customer Account';
+            }
+        }
+        
+        function checkCustomerLogin() {
+            const loginData = localStorage.getItem('melhem_customer_logged_in');
+            
+            if (loginData) {
+                try {
+                    const data = JSON.parse(loginData);
+                    const accountButton = document.getElementById('accountButton');
+                    
+                    if (accountButton) {
+                        accountButton.textContent = `Welcome, ${data.name.split(' ')[0]}`;
+                    }
+                    
+                    // Check if we're on registration section
+                    if (window.location.hash === '#registration') {
+                        showCustomerDashboard();
+                    }
+                } catch (error) {
+                    console.error('Error parsing login data:', error);
+                }
+            }
+        }
+        
+        function showCustomerDashboard() {
+            const loginData = localStorage.getItem('melhem_customer_logged_in');
+            
+            if (!loginData) return;
+            
+            try {
+                const data = JSON.parse(loginData);
+                
+                // Get customer data
+                const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+                const customer = customers.find(c => c.email === data.email);
+                
+                if (!customer) return;
+                
+                // Update UI
+                document.getElementById('registrationForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('customerDashboard').style.display = 'block';
+                
+                // Update welcome message
+                document.getElementById('welcomeMessage').textContent = `Welcome back, ${customer.name}`;
+                
+                // Update account button
+                const accountButton = document.getElementById('accountButton');
+                if (accountButton) {
+                    accountButton.textContent = `Welcome, ${customer.name.split(' ')[0]}`;
+                }
+                
+                // Load customer inquiries
+                loadCustomerInquiries(customer);
+                
+                // Load account info
+                loadAccountInfo(customer);
+                
+            } catch (error) {
+                console.error('Error showing dashboard:', error);
+            }
+        }
+        
+        function loadCustomerInquiries(customer) {
+            const inquiriesContainer = document.getElementById('customerInquiries');
+            
+            if (!customer.inquiries || customer.inquiries.length === 0) {
+                inquiriesContainer.innerHTML = `
+                    <p style="color: #e8e8e8; opacity: 0.7; font-size: 0.9rem;">
+                        You haven't submitted any inquiries yet.
+                    </p>
+                `;
+                return;
+            }
+            
+            // Get all products for reference
+            const products = JSON.parse(localStorage.getItem('melhem_products') || '[]');
+            
+            inquiriesContainer.innerHTML = customer.inquiries.map(inquiry => {
+                const product = products.find(p => p.id === inquiry.productId);
+                const productName = product ? product.name : 'Unknown Product';
+                
+                return `
+                    <div class="inquiry-item">
+                        <div class="inquiry-product">${productName}</div>
+                        <div style="font-size: 0.9rem; color: #e8e8e8; margin-bottom: 0.5rem;">
+                            Submitted: ${new Date(inquiry.date).toLocaleDateString()}
+                        </div>
+                        <div class="inquiry-status status-${inquiry.status || 'pending'}">
+                            ${(inquiry.status || 'pending').toUpperCase()}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function loadAccountInfo(customer) {
+            const accountInfo = document.getElementById('accountInfo');
+            
+            accountInfo.innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-size: 0.9rem; color: #e8e8e8; opacity: 0.7;">Email</div>
+                    <div style="color: #f8f5f0;">${customer.email}</div>
+                </div>
+                
+                ${customer.company ? `
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-size: 0.9rem; color: #e8e8e8; opacity: 0.7;">Company</div>
+                    <div style="color: #f8f5f0;">${customer.company}</div>
+                </div>
+                ` : ''}
+                
+                ${customer.title ? `
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-size: 0.9rem; color: #e8e8e8; opacity: 0.7;">Title</div>
+                    <div style="color: #f8f5f0;">${customer.title}</div>
+                </div>
+                ` : ''}
+                
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-size: 0.9rem; color: #e8e8e8; opacity: 0.7;">Member Since</div>
+                    <div style="color: #f8f5f0;">${new Date(customer.registrationDate).toLocaleDateString()}</div>
+                </div>
+                
+                <div>
+                    <div style="font-size: 0.9rem; color: #e8e8e8; opacity: 0.7;">Total Inquiries</div>
+                    <div style="color: #f8f5f0;">${customer.inquiries ? customer.inquiries.length : 0}</div>
+                </div>
+            `;
+        }
+        
+        function showLoginForm() {
+            document.getElementById('registrationForm').style.display = 'none';
+            document.getElementById('customerDashboard').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+        
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            element.textContent = message;
+            element.className = `form-message ${type}`;
+            element.style.display = 'block';
+            
+            // Clear message after 5 seconds
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000);
+        }
+        
+        function generateId() {
+            return 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        // Function to add customer inquiry (called from product page)
+        window.addCustomerInquiry = function(productId, message) {
+            const loginData = localStorage.getItem('melhem_customer_logged_in');
+            
+            if (!loginData) {
+                alert('Please register or login to submit an inquiry.');
+                return false;
+            }
+            
+            try {
+                const data = JSON.parse(loginData);
+                const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+                const customerIndex = customers.findIndex(c => c.email === data.email);
+                
+                if (customerIndex === -1) return false;
+                
+                // Create inquiry
+                const inquiry = {
+                    id: 'inq_' + Date.now(),
+                    productId: productId,
+                    date: new Date().toISOString(),
+                    message: message || '',
+                    status: 'pending'
+                };
+                
+                // Add to customer
+                if (!customers[customerIndex].inquiries) {
+                    customers[customerIndex].inquiries = [];
+                }
+                customers[customerIndex].inquiries.push(inquiry);
+                
+                // Save back
+                localStorage.setItem('melhem_customers', JSON.stringify(customers));
+                
+                // Also save to global inquiries for admin
+                const inquiries = JSON.parse(localStorage.getItem('melhem_inquiries') || '[]');
+                inquiries.push({
+                    ...inquiry,
+                    customerEmail: data.email,
+                    customerName: data.name
+                });
+                localStorage.setItem('melhem_inquiries', JSON.stringify(inquiries));
+                
+                return true;
+                
+            } catch (error) {
+                console.error('Error adding inquiry:', error);
+                return false;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MELHEM | Product</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>M</text></svg>">
+    
+    <style>
+        /* Product Page Specific Styles */
+        .product-page {
+            padding-top: 80px;
+        }
+        
+        .video-product-hero {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+        }
+        
+        .product-hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        .product-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.9), rgba(10,10,10,0.95));
+            z-index: -1;
+        }
+        
+        .product-hero-content {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .product-title {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            color: #f8f5f0;
+        }
+        
+        .product-tagline {
+            font-size: 1.5rem;
+            color: #e8e8e8;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .product-price {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            color: #f8f5f0;
+        }
+        
+        .product-status {
+            font-size: 1rem;
+            color: #1a3a2a;
+            letter-spacing: 0.05em;
+        }
+        
+        .product-status.sold-out {
+            color: #e8e8e8;
+            opacity: 0.5;
+        }
+        
+        .product-sections {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+        
+        .product-section {
+            margin-bottom: 8rem;
+        }
+        
+        .product-section-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 3rem;
+            color: #f8f5f0;
+        }
+        
+        .product-video {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 4rem;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .product-video video {
+            width: 100%;
+            display: block;
+        }
+        
+        .video-placeholder {
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e8e8e8;
+            opacity: 0.5;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .product-spec {
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .product-spec h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: #f8f5f0;
+        }
+        
+        .product-spec p {
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+        
+        .customization-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .customization-option {
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .customization-option:hover {
+            border-color: #1a3a2a;
+            background: rgba(26,58,42,0.1);
+        }
+        
+        .customization-option.selected {
+            border-color: #1a3a2a;
+            background: rgba(26,58,42,0.2);
+        }
+        
+        .customization-option label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            color: #e8e8e8;
+        }
+        
+        .customization-option input[type="radio"] {
+            margin: 0;
+        }
+        
+        /* Request Availability Button */
+        .request-availability-button {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 3rem auto 0;
+            padding: 1.5rem;
+            background: #1a3a2a;
+            color: #f8f5f0;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .request-availability-button:hover {
+            background: #2a4a35;
+            transform: translateY(-2px);
+        }
+        
+        .request-availability-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .sold-out-message {
+            text-align: center;
+            padding: 3rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 3rem 0;
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .sold-out-message h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            color: #f8f5f0;
+            margin-bottom: 1rem;
+        }
+        
+        .sold-out-message p {
+            color: #e8e8e8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .image-placeholder {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.05);
+            color: #e8e8e8;
+            opacity: 0.5;
+        }
+        
+        /* Availability Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10,10,10,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 2rem;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #f8f5f0;
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: #e8e8e8;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .modal-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e8e8e8;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        .modal-form input,
+        .modal-form textarea,
+        .modal-form select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #f8f5f0;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .modal-form input:focus,
+        .modal-form textarea:focus,
+        .modal-form select:focus {
+            outline: none;
+            border-color: #1a3a2a;
+        }
+        
+        .modal-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .modal-submit-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: #1a3a2a;
+            color: #f8f5f0;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .modal-submit-button:hover {
+            background: #2a4a35;
+        }
+        
+        .modal-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+            text-align: center;
+        }
+        
+        .modal-message.success {
+            background: rgba(46,125,50,0.1);
+            border: 1px solid #2e7d32;
+            color: #a5d6a7;
+        }
+        
+        .modal-message.error {
+            background: rgba(211,47,47,0.1);
+            border: 1px solid #d32f2f;
+            color: #ff8a8a;
+        }
+        
+        .registration-notice {
+            background: rgba(26,58,42,0.1);
+            border: 1px solid #1a3a2a;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #e8e8e8;
+            text-align: center;
+        }
+        
+        .registration-notice a {
+            color: #1a3a2a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .registration-notice a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .product-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .video-product-hero {
+                height: 60vh;
+            }
+            
+            .video-placeholder {
+                height: 300px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                max-height: 85vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <h1 class="brand-word">MELHEM</h1>
+        </div>
+    </div>
+
+    <!-- Fixed Header -->
+    <header class="fixed-header" id="mainHeader">
+        <nav class="nav-container">
+            <a href="index.html" class="brand-logo">MELHEM</a>
+            <ul class="nav-menu">
+                <li><a href="index.html#brand-identity" class="nav-link">Brand</a></li>
+                <li><a href="index.html#philosophy" class="nav-link">Philosophy</a></li>
+                <li><a href="index.html#products" class="nav-link">Objects</a></li>
+                <li><a href="index.html#founder" class="nav-link">Founder</a></li>
+                <li><a href="index.html#registration" class="nav-link">Register</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Customer Account Button -->
+    <button class="account-button" id="accountButton">Customer Account</button>
+
+    <!-- Availability Modal -->
+    <div class="modal-overlay" id="availabilityModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Request Availability</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="modal-form" id="availabilityForm">
+                    <div class="registration-notice" id="registrationNotice" style="display: none;">
+                        <p>To submit an availability request, you need to be registered. <a href="index.html#registration" id="registerLink">Register here</a> or <a href="index.html#registration" id="loginLink">login</a>.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="requestName">Full Name *</label>
+                        <input type="text" id="requestName" placeholder="John Smith" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="requestEmail">Email Address *</label>
+                            <input type="email" id="requestEmail" placeholder="john@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="requestCountry">Country *</label>
+                            <select id="requestCountry" required>
+                                <option value="">Select Country</option>
+                                <option value="US">United States</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="CA">Canada</option>
+                                <option value="AU">Australia</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="CH">Switzerland</option>
+                                <option value="AE">United Arab Emirates</option>
+                                <option value="SG">Singapore</option>
+                                <option value="JP">Japan</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="requestPhone">Phone Number (Optional)</label>
+                        <input type="tel" id="requestPhone" placeholder="+1 (555) 123-4567">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="requestCompany">Company / Organization (Optional)</label>
+                        <input type="text" id="requestCompany" placeholder="Acme Corporation">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="requestMessage">Intended Use (Optional)</label>
+                        <textarea id="requestMessage" placeholder="Brief description of how you intend to use this object"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="modal-submit-button" id="submitRequest">Submit Request</button>
+                    
+                    <div class="modal-message" id="modalMessage"></div>
+                    
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #e8e8e8; opacity: 0.7; text-align: center;">
+                        This request does not guarantee availability. A MELHEM representative will review your request and contact you within 24-48 hours.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <main class="product-page">
+        <!-- Video Product Hero -->
+        <section class="video-product-hero">
+            <video autoplay muted loop playsinline class="product-hero-video" id="productHeroVideo">
+                <source src="videos/hero-bg.mp4" type="video/mp4">
+                <source src="videos/hero-bg-loop.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="product-hero-overlay"></div>
+            <div class="product-hero-content">
+                <div class="hero-text">
+                    <h1 class="product-title" id="productTitle">Loading...</h1>
+                    <p class="product-tagline" id="productTagline"></p>
+                    <div class="product-meta">
+                        <div class="product-price" id="productPrice"></div>
+                        <div class="product-status" id="productStatus"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Content -->
+        <div class="product-sections" id="productSections">
+            <!-- Content loaded by JavaScript -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">MELHEM</div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#philosophy">Philosophy</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="admin.html" style="color: #1a3a2a;">Admin</a>
+            </div>
+            <div class="footer-copyright">
+                <p>© <span id="currentYear"></span> MELHEM. All rights reserved.</p>
+                <p class="footer-disclaimer">Objects shown are representative. Specifications subject to minor changes during production.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple product storage
+        const ProductStorage = {
+            getAll() {
+                const products = localStorage.getItem('melhem_products');
+                return products ? JSON.parse(products) : [];
+            },
+            
+            getById(id) {
+                const products = this.getAll();
+                return products.find(p => p.id === id);
+            },
+            
+            save(products) {
+                localStorage.setItem('melhem_products', JSON.stringify(products));
+            }
+        };
+        
+        // Customer system
+        const CustomerSystem = {
+            isLoggedIn() {
+                return localStorage.getItem('melhem_customer_logged_in') !== null;
+            },
+            
+            getCurrentCustomer() {
+                const loginData = localStorage.getItem('melhem_customer_logged_in');
+                if (!loginData) return null;
+                
+                try {
+                    const data = JSON.parse(loginData);
+                    const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+                    return customers.find(c => c.email === data.email);
+                } catch (error) {
+                    return null;
+                }
+            },
+            
+            getAllCustomers() {
+                return JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+            },
+            
+            saveCustomers(customers) {
+                localStorage.setItem('melhem_customers', JSON.stringify(customers));
+            },
+            
+            createCustomer(customerData) {
+                const customers = this.getAllCustomers();
+                
+                // Check if email already exists
+                if (customers.some(c => c.email === customerData.email)) {
+                    return { success: false, message: 'Email already registered' };
+                }
+                
+                const newCustomer = {
+                    id: 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    name: customerData.name,
+                    email: customerData.email,
+                    phone: customerData.phone || '',
+                    company: customerData.company || '',
+                    country: customerData.country || '',
+                    registrationDate: new Date().toISOString(),
+                    status: 'active',
+                    inquiries: []
+                };
+                
+                customers.push(newCustomer);
+                this.saveCustomers(customers);
+                
+                // Auto-login the customer
+                localStorage.setItem('melhem_customer_logged_in', JSON.stringify({
+                    email: customerData.email,
+                    name: customerData.name,
+                    timestamp: Date.now()
+                }));
+                
+                return { success: true, customer: newCustomer };
+            },
+            
+            addInquiry(customerEmail, productId, inquiryData) {
+                const customers = this.getAllCustomers();
+                const customerIndex = customers.findIndex(c => c.email === customerEmail);
+                
+                if (customerIndex === -1) {
+                    return { success: false, message: 'Customer not found' };
+                }
+                
+                const inquiry = {
+                    id: 'inq_' + Date.now(),
+                    productId: productId,
+                    date: new Date().toISOString(),
+                    name: inquiryData.name,
+                    email: inquiryData.email,
+                    country: inquiryData.country,
+                    phone: inquiryData.phone || '',
+                    company: inquiryData.company || '',
+                    message: inquiryData.message || '',
+                    status: 'pending'
+                };
+                
+                if (!customers[customerIndex].inquiries) {
+                    customers[customerIndex].inquiries = [];
+                }
+                
+                customers[customerIndex].inquiries.push(inquiry);
+                this.saveCustomers(customers);
+                
+                // Also save to global inquiries for admin
+                const inquiries = JSON.parse(localStorage.getItem('melhem_inquiries') || '[]');
+                inquiries.push({
+                    ...inquiry,
+                    customerName: inquiryData.name
+                });
+                localStorage.setItem('melhem_inquiries', JSON.stringify(inquiries));
+                
+                return { success: true, inquiry: inquiry };
+            }
+        };
+        
+        // Initialize loading screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                if (loadingScreen) {
+                    loadingScreen.classList.add('loaded');
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 600);
+                }
+            }, 1000);
+            
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Mobile menu toggle
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                
+                // Close mobile menu when clicking a link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenuToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+            
+            // Account button click
+            const accountButton = document.getElementById('accountButton');
+            if (accountButton) {
+                accountButton.addEventListener('click', function() {
+                    window.location.href = 'index.html#registration';
+                });
+            }
+            
+            // Check if customer is logged in
+            updateAccountButton();
+            
+            // Load product data
+            loadProduct();
+            
+            // Setup modal
+            setupAvailabilityModal();
+        });
+        
+        function updateAccountButton() {
+            const accountButton = document.getElementById('accountButton');
+            if (!accountButton) return;
+            
+            if (CustomerSystem.isLoggedIn()) {
+                const customer = CustomerSystem.getCurrentCustomer();
+                if (customer) {
+                    accountButton.textContent = `Welcome, ${customer.name.split(' ')[0]}`;
+                }
+            } else {
+                accountButton.textContent = 'Customer Account';
+            }
+        }
+        
+        function loadProduct() {
+            // Get product ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                // Default to first product
+                const products = ProductStorage.getAll();
+                if (products.length > 0) {
+                    renderProduct(products[0]);
+                } else {
+                    // Load default product
+                    renderProduct(getDefaultProduct());
+                }
+                return;
+            }
+            
+            const product = ProductStorage.getById(productId);
+            if (product) {
+                renderProduct(product);
+            } else {
+                // Product not found, show default
+                renderProduct(getDefaultProduct());
+            }
+        }
+        
+        function getDefaultProduct() {
+            return {
+                id: 'the-guardian',
+                name: 'The Guardian',
+                tagline: 'A secure travel companion for the discerning.',
+                description: 'A purpose-built travel case designed for secure transport of sensitive documents and essential items.',
+                detailedDescription: 'The Guardian was developed in response to requests from clients who frequently travel with sensitive materials. It provides discreet, secure storage with multiple layers of protection while remaining compact enough for carry-on use. Each case is hand-finished and includes a proprietary locking mechanism.',
+                price: '$12,500',
+                total: 10,
+                available: 3,
+                status: 'available',
+                images: ['guardian-1.jpg', 'guardian-2.jpg'],
+                video: '',
+                specifications: {
+                    materials: 'Aerospace-grade aluminum, Italian full-grain leather',
+                    construction: 'CNC machined, hand-finished',
+                    dimensions: '45cm × 30cm × 15cm',
+                    weight: '4.2 kg',
+                    emblemMaterial: 'Platinum inlay',
+                    numbering: 'Individually numbered 1-10'
+                },
+                customization: {
+                    zipperFinish: ['Brushed steel', 'Black oxide'],
+                    interiorConfig: ['Open', 'Divided']
+                }
+            };
+        }
+        
+        function renderProduct(product) {
+            // Update hero section
+            document.getElementById('productTitle').textContent = product.name;
+            document.getElementById('productTagline').textContent = product.tagline;
+            document.getElementById('productPrice').textContent = product.price;
+            
+            const statusElement = document.getElementById('productStatus');
+            if (product.available > 0) {
+                statusElement.textContent = `${product.available} of ${product.total} remaining`;
+                statusElement.className = 'product-status';
+            } else {
+                statusElement.textContent = 'Sold Out — Edition Closed';
+                statusElement.className = 'product-status sold-out';
+            }
+            
+            // Build product sections
+            const sectionsHTML = buildProductSections(product);
+            document.getElementById('productSections').innerHTML = sectionsHTML;
+            
+            // Store current product globally for modal
+            window.currentProduct = product;
+            
+            // Setup request button
+            setupRequestButton(product);
+        }
+        
+        function buildProductSections(product) {
+            const isSoldOut = product.available <= 0;
+            
+            return `
+                <section class="product-section">
+                    <h2 class="product-section-title">Product Explanation</h2>
+                    <p style="font-size: 1.2rem; line-height: 1.6; color: #e8e8e8; max-width: 800px; margin-bottom: 3rem;">
+                        ${product.detailedDescription}
+                    </p>
+                    
+                    <div class="product-grid">
+                        <div class="product-spec">
+                            <h3>What it is</h3>
+                            <p>${product.description}</p>
+                        </div>
+                        <div class="product-spec">
+                            <h3>Who it is for</h3>
+                            <p>Designed for individuals who require reliable, discreet solutions for high-responsibility situations.</p>
+                        </div>
+                        <div class="product-spec">
+                            <h3>How to use</h3>
+                            <p>Integrates seamlessly into daily routines, providing security and function without drawing attention.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                ${product.images && product.images.length > 0 ? `
+                <section class="product-section dark-section">
+                    <h2 class="product-section-title">Gallery</h2>
+                    <div class="image-gallery">
+                        ${product.images.map(image => `
+                            <img src="images/${image}" alt="${product.name}" class="gallery-image" onerror="this.onerror=null; this.src=''; this.className='image-placeholder'; this.innerHTML='Image not found';">
+                        `).join('')}
+                    </div>
+                </section>
+                ` : ''}
+                
+                <section class="product-section">
+                    <h2 class="product-section-title">Specifications</h2>
+                    <div class="product-grid">
+                        ${Object.entries(product.specifications || {}).map(([key, value]) => `
+                            <div class="product-spec">
+                                <h3>${key.charAt(0).toUpperCase() + key.slice(1)}</h3>
+                                <p>${value}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+                
+                <section class="product-section dark-section">
+                    <h2 class="product-section-title">Customization</h2>
+                    <p style="margin-bottom: 2rem; color: #e8e8e8;">
+                        Limited functional customization options.
+                    </p>
+                    
+                    <div class="customization-options">
+                        ${product.customization.zipperFinish && product.customization.zipperFinish.length > 0 ? `
+                        <div>
+                            <h3 style="margin-bottom: 1rem; font-family: 'Crimson Text', serif;">Zipper Finish</h3>
+                            ${product.customization.zipperFinish.map(option => `
+                                <div class="customization-option" onclick="selectOption(this)">
+                                    <label>
+                                        <input type="radio" name="zipper" value="${option}">
+                                        ${option}
+                                    </label>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ` : ''}
+                        
+                        ${product.customization.interiorConfig && product.customization.interiorConfig.length > 0 ? `
+                        <div>
+                            <h3 style="margin-bottom: 1rem; font-family: 'Crimson Text', serif;">Interior Configuration</h3>
+                            ${product.customization.interiorConfig.map(option => `
+                                <div class="customization-option" onclick="selectOption(this)">
+                                    <label>
+                                        <input type="radio" name="interior" value="${option}" checked>
+                                        ${option}
+                                    </label>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ` : ''}
+                    </div>
+                </section>
+                
+                <section class="product-section">
+                    <h2 class="product-section-title">Acquisition</h2>
+                    
+                    ${isSoldOut ? `
+                        <div class="sold-out-message">
+                            <h3>Edition Closed</h3>
+                            <p>This limited edition has sold out. Please view our current objects for available pieces.</p>
+                            <a href="index.html#products" style="display: inline-block; margin-top: 1rem; color: #1a3a2a; text-decoration: none;">
+                                View available objects →
+                            </a>
+                        </div>
+                    ` : `
+                        <button class="request-availability-button" id="requestAvailabilityButton">
+                            Request Availability
+                        </button>
+                        
+                        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #e8e8e8; opacity: 0.7; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">
+                            This request does not guarantee availability. A MELHEM representative will review your request and contact you within 24-48 hours.
+                        </p>
+                    `}
+                </section>
+            `;
+        }
+        
+        function selectOption(element) {
+            // Remove selected class from all options in this group
+            const group = element.closest('div');
+            group.querySelectorAll('.customization-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Check the radio input
+            const radio = element.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+            }
+        }
+        
+        function setupRequestButton(product) {
+            const requestButton = document.getElementById('requestAvailabilityButton');
+            if (!requestButton) return;
+            
+            requestButton.addEventListener('click', function() {
+                openAvailabilityModal(product);
+            });
+        }
+        
+        function setupAvailabilityModal() {
+            const modal = document.getElementById('availabilityModal');
+            const closeButton = document.getElementById('modalClose');
+            const form = document.getElementById('availabilityForm');
+            
+            // Close modal when clicking X
+            closeButton.addEventListener('click', function() {
+                modal.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitAvailabilityRequest();
+            });
+        }
+        
+        function openAvailabilityModal(product) {
+            const modal = document.getElementById('availabilityModal');
+            const form = document.getElementById('availabilityForm');
+            const notice = document.getElementById('registrationNotice');
+            
+            // Reset form and messages
+            form.reset();
+            document.getElementById('modalMessage').style.display = 'none';
+            
+            // Check if user is logged in
+            const isLoggedIn = CustomerSystem.isLoggedIn();
+            
+            if (isLoggedIn) {
+                // User is logged in, pre-fill form
+                notice.style.display = 'none';
+                
+                const customer = CustomerSystem.getCurrentCustomer();
+                if (customer) {
+                    document.getElementById('requestName').value = customer.name;
+                    document.getElementById('requestEmail').value = customer.email;
+                    document.getElementById('requestPhone').value = customer.phone || '';
+                    document.getElementById('requestCompany').value = customer.company || '';
+                    
+                    if (customer.country) {
+                        document.getElementById('requestCountry').value = customer.country;
+                    }
+                }
+            } else {
+                // User is not logged in, show registration notice
+                notice.style.display = 'block';
+                
+                // Clear form
+                form.reset();
+            }
+            
+            // Store current product in modal
+            modal.dataset.productId = product.id;
+            modal.dataset.productName = product.name;
+            
+            // Open modal
+            modal.classList.add('active');
+            
+            // Focus on first input
+            setTimeout(() => {
+                if (isLoggedIn) {
+                    document.getElementById('requestMessage').focus();
+                } else {
+                    document.getElementById('requestName').focus();
+                }
+            }, 100);
+        }
+        
+        function submitAvailabilityRequest() {
+            const modal = document.getElementById('availabilityModal');
+            const form = document.getElementById('availabilityForm');
+            const messageElement = document.getElementById('modalMessage');
+            const submitButton = document.getElementById('submitRequest');
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('requestName').value.trim(),
+                email: document.getElementById('requestEmail').value.trim(),
+                country: document.getElementById('requestCountry').value,
+                phone: document.getElementById('requestPhone').value.trim(),
+                company: document.getElementById('requestCompany').value.trim(),
+                message: document.getElementById('requestMessage').value.trim()
+            };
+            
+            // Validation
+            if (!formData.name || !formData.email || !formData.country) {
+                showModalMessage('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(formData.email)) {
+                showModalMessage('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            const productId = modal.dataset.productId;
+            const productName = modal.dataset.productName;
+            
+            // Check if user is logged in
+            const isLoggedIn = CustomerSystem.isLoggedIn();
+            const currentCustomer = CustomerSystem.getCurrentCustomer();
+            
+            // If not logged in, check if email exists in customers
+            let customerEmail = formData.email;
+            
+            if (!isLoggedIn) {
+                // Check if email already exists
+                const existingCustomer = CustomerSystem.getAllCustomers().find(c => c.email === formData.email);
+                
+                if (existingCustomer) {
+                    showModalMessage('This email is already registered. Please login to submit a request.', 'error');
+                    return;
+                }
+                
+                // Create new customer
+                const result = CustomerSystem.createCustomer(formData);
+                if (!result.success) {
+                    showModalMessage(result.message, 'error');
+                    return;
+                }
+                
+                customerEmail = formData.email;
+                updateAccountButton();
+            } else if (currentCustomer && currentCustomer.email !== formData.email) {
+                // User is logged in but changed email - check if new email exists
+                const existingCustomer = CustomerSystem.getAllCustomers().find(c => c.email === formData.email && c.email !== currentCustomer.email);
+                if (existingCustomer) {
+                    showModalMessage('This email is already registered by another customer.', 'error');
+                    return;
+                }
+                
+                // Update customer info
+                const customers = CustomerSystem.getAllCustomers();
+                const customerIndex = customers.findIndex(c => c.email === currentCustomer.email);
+                if (customerIndex !== -1) {
+                    customers[customerIndex].name = formData.name;
+                    customers[customerIndex].phone = formData.phone;
+                    customers[customerIndex].company = formData.company;
+                    customers[customerIndex].country = formData.country;
+                    CustomerSystem.saveCustomers(customers);
+                    
+                    // Update login data
+                    localStorage.setItem('melhem_customer_logged_in', JSON.stringify({
+                        email: formData.email,
+                        name: formData.name,
+                        timestamp: Date.now()
+                    }));
+                }
+            }
+            
+            // Submit the inquiry
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+            
+            setTimeout(() => {
+                const result = CustomerSystem.addInquiry(customerEmail, productId, formData);
+                
+                if (result.success) {
+                    showModalMessage('Your request has been submitted successfully. A MELHEM representative will contact you within 24-48 hours.', 'success');
+                    
+                    // Clear form after success
+                    setTimeout(() => {
+                        form.reset();
+                        modal.classList.remove('active');
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Submit Request';
+                    }, 3000);
+                } else {
+                    showModalMessage(result.message, 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit Request';
+                }
+            }, 1000);
+        }
+        
+        function showModalMessage(message, type) {
+            const messageElement = document.getElementById('modalMessage');
+            messageElement.textContent = message;
+            messageElement.className = `modal-message ${type}`;
+            messageElement.style.display = 'block';
+            
+            // Scroll to message
+            messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    </script>
+</body>
+</html>

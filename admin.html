@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MELHEM | Admin</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>M</text></svg>">
+    
+    <style>
+        :root {
+            --color-black: #0a0a0a;
+            --color-black-light: #1a1a1a;
+            --color-ivory: #f8f5f0;
+            --color-silver: #e8e8e8;
+            --color-forest: #1a3a2a;
+            --color-error: #d32f2f;
+            --color-success: #2e7d32;
+            --color-warning: #f57c00;
+            --color-info: #1976d2;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--color-black);
+            color: var(--color-ivory);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .admin-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .admin-header h1 {
+            font-family: 'Crimson Text', serif;
+            font-weight: 400;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-ivory);
+        }
+        
+        .admin-header p {
+            color: var(--color-silver);
+            opacity: 0.7;
+        }
+        
+        .login-section {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 3rem 2rem;
+            background: var(--color-black-light);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .dashboard-section {
+            display: none;
+        }
+        
+        .admin-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+        }
+        
+        .nav-button {
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--color-silver);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .nav-button.active {
+            background: var(--color-forest);
+            color: var(--color-ivory);
+        }
+        
+        .admin-content {
+            display: none;
+        }
+        
+        .admin-content.active {
+            display: block;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+        
+        .sidebar {
+            background: var(--color-black-light);
+            border-radius: 8px;
+            padding: 2rem;
+            height: fit-content;
+        }
+        
+        .main-content {
+            background: var(--color-black-light);
+            border-radius: 8px;
+            padding: 2rem;
+            min-height: 500px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--color-silver);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: var(--color-ivory);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-forest);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--color-forest);
+            color: var(--color-ivory);
+            border: none;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .submit-button:hover {
+            background: #2a4a35;
+        }
+        
+        .secondary-button {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.05);
+            color: var(--color-silver);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .error-message {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: rgba(211,47,47,0.1);
+            border: 1px solid var(--color-error);
+            border-radius: 4px;
+            color: #ff8a8a;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .success-message {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: rgba(46,125,50,0.1);
+            border: 1px solid var(--color-success);
+            border-radius: 4px;
+            color: #a5d6a7;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        /* Product Management */
+        .product-list {
+            margin-top: 2rem;
+        }
+        
+        .product-item {
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .product-item:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+        }
+        
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            color: var(--color-ivory);
+            font-size: 1.1rem;
+        }
+        
+        .product-status {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: var(--color-forest);
+            color: var(--color-ivory);
+        }
+        
+        .product-status.archived {
+            background: var(--color-warning);
+        }
+        
+        .product-status.sold-out {
+            background: var(--color-error);
+        }
+        
+        .product-details {
+            font-size: 0.9rem;
+            color: var(--color-silver);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .action-button {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: var(--color-silver);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .action-button:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .action-button.edit {
+            background: rgba(26,58,42,0.2);
+            border-color: var(--color-forest);
+        }
+        
+        .action-button.delete {
+            background: rgba(211,47,47,0.1);
+            border-color: var(--color-error);
+        }
+        
+        /* Sidebar Sections */
+        .sidebar-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-ivory);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 4px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-ivory);
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--color-silver);
+            opacity: 0.7;
+        }
+        
+        /* Image Preview */
+        .image-preview {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .preview-image {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .no-image {
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.03);
+            border-radius: 4px;
+            border: 1px dashed rgba(255,255,255,0.1);
+            color: var(--color-silver);
+            opacity: 0.5;
+            font-size: 0.8rem;
+        }
+        
+        .image-input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .image-input-group input {
+            flex: 1;
+        }
+        
+        .add-image-button {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: var(--color-silver);
+            cursor: pointer;
+        }
+        
+        /* Order Tracking */
+        .orders-list {
+            margin-top: 2rem;
+        }
+        
+        .order-item {
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .order-customer {
+            font-weight: 600;
+            color: var(--color-ivory);
+            font-size: 1.1rem;
+        }
+        
+        .order-date {
+            font-size: 0.8rem;
+            color: var(--color-silver);
+            opacity: 0.7;
+        }
+        
+        .order-product {
+            font-size: 0.9rem;
+            color: var(--color-silver);
+            margin-bottom: 0.5rem;
+        }
+        
+        .order-message {
+            font-size: 0.9rem;
+            color: var(--color-silver);
+            background: rgba(255,255,255,0.03);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border-left: 3px solid var(--color-forest);
+        }
+        
+        .order-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: rgba(255,193,7,0.1);
+            color: #ffd54f;
+            border: 1px solid #ffb300;
+        }
+        
+        .status-reviewed {
+            background: rgba(33,150,243,0.1);
+            color: #64b5f6;
+            border: 1px solid #2196f3;
+        }
+        
+        .status-approved {
+            background: rgba(76,175,80,0.1);
+            color: #81c784;
+            border: 1px solid #4caf50;
+        }
+        
+        .status-rejected {
+            background: rgba(211,47,47,0.1);
+            color: #ff8a8a;
+            border: 1px solid #d32f2f;
+        }
+        
+        .status-select {
+            padding: 0.3rem 0.8rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: var(--color-ivory);
+            font-size: 0.8rem;
+        }
+        
+        .update-status-button {
+            padding: 0.3rem 0.8rem;
+            background: var(--color-forest);
+            color: var(--color-ivory);
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        /* Customer Management */
+        .customers-list {
+            margin-top: 2rem;
+        }
+        
+        .customer-item {
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .customer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .customer-name {
+            font-weight: 600;
+            color: var(--color-ivory);
+            font-size: 1.1rem;
+        }
+        
+        .customer-email {
+            font-size: 0.9rem;
+            color: var(--color-silver);
+            margin-bottom: 0.5rem;
+        }
+        
+        .customer-info {
+            font-size: 0.9rem;
+            color: var(--color-silver);
+            margin-bottom: 0.5rem;
+        }
+        
+        .customer-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .customer-stat {
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 4px;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .stat-count {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--color-ivory);
+        }
+        
+        .stat-label-small {
+            font-size: 0.7rem;
+            color: var(--color-silver);
+            opacity: 0.7;
+        }
+        
+        /* Logout Section */
+        .logout-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-header,
+            .order-header,
+            .customer-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .admin-nav {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <div class="admin-header">
+                <h1>MELHEM Admin</h1>
+                <p>Secure management interface</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="adminKey">Admin Key</label>
+                <input type="password" id="adminKey" placeholder="Enter admin key">
+            </div>
+            
+            <button class="submit-button" onclick="adminLogin()">Access Admin</button>
+            
+            <div class="error-message" id="loginError">
+                Invalid admin key. Please try again.
+            </div>
+            
+            <div class="success-message" id="loginSuccess">
+                Login successful. Loading dashboard...
+            </div>
+        </div>
+        
+        <!-- Dashboard Section -->
+        <div class="dashboard-section" id="dashboardSection">
+            <div class="admin-header">
+                <h1>MELHEM Administration</h1>
+                <p>Complete management system</p>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="admin-nav">
+                <button class="nav-button active" onclick="showSection('dashboard')">Dashboard</button>
+                <button class="nav-button" onclick="showSection('products')">Products</button>
+                <button class="nav-button" onclick="showSection('orders')">Orders</button>
+                <button class="nav-button" onclick="showSection('customers')">Customers</button>
+                <button class="nav-button" onclick="showSection('settings')">Settings</button>
+            </div>
+            
+            <!-- Dashboard Content -->
+            <div class="admin-content active" id="dashboardContent">
+                <div class="dashboard-grid">
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <div class="sidebar-section">
+                            <h3>Quick Stats</h3>
+                            <div class="stats-grid" id="statsGrid">
+                                <!-- Stats loaded by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-section">
+                            <h3>Recent Activity</h3>
+                            <div id="recentActivity">
+                                <!-- Activity loaded by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="logout-section">
+                            <button class="secondary-button" onclick="adminLogout()">Logout</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Content -->
+                    <div class="main-content">
+                        <h2 style="margin-bottom: 2rem; font-weight: 400;">Welcome to MELHEM Admin</h2>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                            <div style="background: rgba(26,58,42,0.1); border: 1px solid var(--color-forest); padding: 2rem; border-radius: 8px;">
+                                <h3 style="margin-bottom: 1rem; font-weight: 500;">Products</h3>
+                                <p style="color: var(--color-silver); margin-bottom: 1rem;">Manage your product catalog, update availability, and add new objects.</p>
+                                <button class="action-button" onclick="showSection('products')">Manage Products</button>
+                            </div>
+                            
+                            <div style="background: rgba(33,150,243,0.1); border: 1px solid #2196f3; padding: 2rem; border-radius: 8px;">
+                                <h3 style="margin-bottom: 1rem; font-weight: 500;">Customer Inquiries</h3>
+                                <p style="color: var(--color-silver); margin-bottom: 1rem;">Review and respond to customer inquiries and acquisition requests.</p>
+                                <button class="action-button" onclick="showSection('orders')">View Inquiries</button>
+                            </div>
+                            
+                            <div style="background: rgba(255,193,7,0.1); border: 1px solid #ffb300; padding: 2rem; border-radius: 8px;">
+                                <h3 style="margin-bottom: 1rem; font-weight: 500;">Customer Database</h3>
+                                <p style="color: var(--color-silver); margin-bottom: 1rem;">Manage registered customers and view their inquiry history.</p>
+                                <button class="action-button" onclick="showSection('customers')">View Customers</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Management -->
+            <div class="admin-content" id="productsContent">
+                <div class="dashboard-grid">
+                    <div class="sidebar">
+                        <div class="sidebar-section">
+                            <h3>Add New Product</h3>
+                            <form id="productForm">
+                                <input type="hidden" id="productId">
+                                
+                                <div class="form-group">
+                                    <label for="productName">Product Name *</label>
+                                    <input type="text" id="productName" placeholder="The Guardian" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productTagline">Tagline *</label>
+                                    <input type="text" id="productTagline" placeholder="A secure travel companion" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productDescription">Description *</label>
+                                    <textarea id="productDescription" placeholder="Brief description of the product" required></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productDetailedDescription">Detailed Description *</label>
+                                    <textarea id="productDetailedDescription" placeholder="Complete product explanation" required></textarea>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="productPrice">Price *</label>
+                                        <input type="text" id="productPrice" placeholder="$12,500" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="productStatus">Status *</label>
+                                        <select id="productStatus" required>
+                                            <option value="available">Available</option>
+                                            <option value="sold-out">Sold Out</option>
+                                            <option value="archived">Archived</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="productTotal">Total Quantity *</label>
+                                        <input type="number" id="productTotal" placeholder="10" required min="1">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="productAvailable">Available Quantity *</label>
+                                        <input type="number" id="productAvailable" placeholder="3" required min="0">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+    <label>Images (enter comma-separated filenames)</label>
+    <input type="text" id="productImages" placeholder="guardian-1.jpg, guardian-2.jpg">
+    <div style="font-size: 0.8rem; color: var(--color-silver); opacity: 0.7; margin-top: 0.5rem;">
+        Example: guardian-1.jpg, guardian-2.jpg (place files in /images folder)
+    </div>
+</div>
+                                
+                                <div class="form-group">
+                                    <label for="productVideo">Video Filename (optional)</label>
+                                    <input type="text" id="productVideo" placeholder="product-video.mp4">
+                                </div>
+                                
+                                <button type="submit" class="submit-button">Save Product</button>
+                                <button type="button" class="secondary-button" onclick="clearForm()">Clear Form</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="main-content">
+                        <h2 style="margin-bottom: 2rem; font-weight: 400;">Product Management</h2>
+                        
+                        <div class="product-list" id="productList">
+                            <!-- Products loaded by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Orders Management -->
+            <div class="admin-content" id="ordersContent">
+                <div class="main-content">
+                    <h2 style="margin-bottom: 2rem; font-weight: 400;">Customer Inquiries</h2>
+                    
+                    <div class="orders-list" id="ordersList">
+                        <!-- Orders loaded by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Customers Management -->
+            <div class="admin-content" id="customersContent">
+                <div class="main-content">
+                    <h2 style="margin-bottom: 2rem; font-weight: 400;">Customer Database</h2>
+                    
+                    <div class="customers-list" id="customersList">
+                        <!-- Customers loaded by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings -->
+            <div class="admin-content" id="settingsContent">
+                <div class="main-content">
+                    <h2 style="margin-bottom: 2rem; font-weight: 400;">Settings</h2>
+                    
+                    <div style="max-width: 500px;">
+                        <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <h3 style="margin-bottom: 1rem; font-weight: 500;">Change Admin Password</h3>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" placeholder="Enter new password">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                            </div>
+                            <button class="submit-button" onclick="changePassword()">Update Password</button>
+                        </div>
+                        
+                        <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <h3 style="margin-bottom: 1rem; font-weight: 500;">Export Data</h3>
+                            <p style="color: var(--color-silver); margin-bottom: 1rem;">Export customer and inquiry data for backup.</p>
+                            <button class="secondary-button" onclick="exportData()">Export All Data</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin Authentication
+        function hashString(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(36);
+        }
+        
+        // Default admin password: "melhem2024secure" - CHANGE THIS!
+        const ADMIN_PASSWORD_HASH = hashString('melhem2024secure');
+        
+        // Check if already logged in
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('melhem_admin_logged_in') === 'true') {
+                showDashboard();
+            }
+        });
+        
+        function adminLogin() {
+            const key = document.getElementById('adminKey').value;
+            const hashedKey = hashString(key);
+            
+            if (hashedKey === ADMIN_PASSWORD_HASH) {
+                localStorage.setItem('melhem_admin_logged_in', 'true');
+                
+                document.getElementById('loginSuccess').style.display = 'block';
+                document.getElementById('loginError').style.display = 'none';
+                
+                setTimeout(() => {
+                    showDashboard();
+                }, 1000);
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+                document.getElementById('loginSuccess').style.display = 'none';
+            }
+        }
+        
+        function adminLogout() {
+            localStorage.removeItem('melhem_admin_logged_in');
+            location.reload();
+        }
+        
+        // Section Navigation
+        function showSection(section) {
+            // Update nav buttons
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide all sections
+            document.querySelectorAll('.admin-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(section + 'Content').classList.add('active');
+            
+            // Load section data
+            if (section === 'dashboard') {
+                loadDashboardStats();
+                loadRecentActivity();
+            } else if (section === 'products') {
+                loadProducts();
+            } else if (section === 'orders') {
+                loadOrders();
+            } else if (section === 'customers') {
+                loadCustomers();
+            }
+        }
+        
+        function showDashboard() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            loadDashboardStats();
+            loadRecentActivity();
+        }
+        
+        // Dashboard Stats
+        function loadDashboardStats() {
+            const products = JSON.parse(localStorage.getItem('melhem_products') || '[]');
+            const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+            const inquiries = JSON.parse(localStorage.getItem('melhem_inquiries') || '[]');
+            
+            const stats = {
+                products: products.length,
+                availableProducts: products.filter(p => p.status === 'available').length,
+                customers: customers.length,
+                inquiries: inquiries.length,
+                pendingInquiries: inquiries.filter(i => i.status === 'pending').length
+            };
+            
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${stats.products}</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.availableProducts}</div>
+                    <div class="stat-label">Available</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.customers}</div>
+                    <div class="stat-label">Customers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.inquiries}</div>
+                    <div class="stat-label">Inquiries</div>
+                </div>
+            `;
+        }
+        
+        function loadRecentActivity() {
+            const inquiries = JSON.parse(localStorage.getItem('melhem_inquiries') || '[]');
+            const products = JSON.parse(localStorage.getItem('melhem_products') || '[]');
+            
+            // Sort by date, newest first
+            const recentInquiries = inquiries
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+            
+            let activityHTML = '';
+            
+            if (recentInquiries.length === 0) {
+                activityHTML = '<p style="color: var(--color-silver); opacity: 0.7; font-size: 0.9rem;">No recent activity</p>';
+            } else {
+                recentInquiries.forEach(inquiry => {
+                    const product = products.find(p => p.id === inquiry.productId);
+                    const productName = product ? product.name : 'Unknown Product';
+                    
+                    activityHTML += `
+                        <div style="margin-bottom: 1rem; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 4px;">
+                            <div style="font-size: 0.9rem; color: var(--color-silver);">
+                                New inquiry for <strong>${productName}</strong>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--color-silver); opacity: 0.7; margin-top: 0.3rem;">
+                                ${new Date(inquiry.date).toLocaleDateString()}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('recentActivity').innerHTML = activityHTML;
+        }
+        
+        // Product Management (Same as before with updates)
+        let editingProductId = null;
+        let currentImages = [];
+        
+        function loadProducts() {
+            const products = JSON.parse(localStorage.getItem('melhem_products') || '[]');
+            const productList = document.getElementById('productList');
+            
+            if (products.length === 0) {
+                productList.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--color-silver); opacity: 0.5;">
+                        <p>No products yet. Add your first product using the form.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            productList.innerHTML = products.map(product => `
+                <div class="product-item">
+                    <div class="product-header">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-status ${product.status}">${product.status.toUpperCase()}</div>
+                    </div>
+                    
+                    <div class="product-details">
+                        <div><strong>${product.tagline}</strong></div>
+                        <div>${product.price} | ${product.available} of ${product.total} available</div>
+                        ${product.images && product.images.length > 0 ? `
+                            <div style="margin-top: 0.5rem; font-size: 0.8rem;">
+                                Images: ${product.images.join(', ')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="action-button edit" onclick="editProduct('${product.id}')">Edit</button>
+                        <button class="action-button" onclick="viewProduct('${product.id}')">View</button>
+                        <button class="action-button delete" onclick="deleteProduct('${product.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function viewProduct(id) {
+            window.open(`product.html?id=${id}`, '_blank');
+        }
+        
+    function editProduct(id) {
+    const products = JSON.parse(localStorage.getItem('melhem_products') || '[]');
+    const product = products.find(p => p.id === id);
+    
+    if (!product) return;
+    
+    editingProductId = id;
+    
+    // Fill form
+    document.getElementById('productId').value = product.id;
+    document.getElementById('productName').value = product.name;
+    document.getElementById('productTagline').value = product.tagline;
+    document.getElementById('productDescription').value = product.description;
+    document.getElementById('productDetailedDescription').value = product.detailedDescription;
+    document.getElementById('productPrice').value = product.price;
+    document.getElementById('productStatus').value = product.status;
+    document.getElementById('productTotal').value = product.total;
+    document.getElementById('productAvailable').value = product.available;
+    document.getElementById('productVideo').value = product.video || '';
+    document.getElementById('productImages').value = product.images ? product.images.join(', ') : '';
+    
+    // Scroll to form
+    document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+}
+        
+        function deleteProduct(id) {
+            if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                const products = JSON.parse(localStorage.getItem('melhem_products') || '[]');
+                const filteredProducts = products.filter(p => p.id !== id);
+                localStorage.setItem('melhem_products', JSON.stringify(filteredProducts));
+                loadProducts();
+                loadDashboardStats();
+                
+                if (editingProductId === id) {
+                    clearForm();
+                }
+            }
+        }
+        
+        function addImage() {
+            const imageInput = document.getElementById('newImage');
+            const imageName = imageInput.value.trim();
+            
+            if (imageName) {
+                currentImages.push(imageName);
+                imageInput.value = '';
+                updateImagePreview();
+            }
+        }
+        
+        function removeImage(index) {
+            currentImages.splice(index, 1);
+            updateImagePreview();
+        }
+        
+        function updateImagePreview() {
+            const preview = document.getElementById('imagePreview');
+            
+            if (currentImages.length === 0) {
+                preview.innerHTML = '<div class="no-image">No images added</div>';
+                return;
+            }
+            
+            preview.innerHTML = currentImages.map((image, index) => `
+                <div style="position: relative;">
+                    <img src="images/${image}" class="preview-image" onerror="this.onerror=null; this.src=''; this.style.display='none'; this.parentElement.querySelector('.no-image').style.display='flex';">
+                    <div class="no-image" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;">${image}</div>
+                    <button type="button" onclick="removeImage(${index})" style="position: absolute; top: 5px; right: 5px; background: var(--color-error); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer;">×</button>
+                </div>
+            `).join('');
+        }
+        
+        function clearForm() {
+            editingProductId = null;
+            currentImages = [];
+            
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('newImage').value = '';
+            updateImagePreview();
+        }
+        
+       // Form submission
+document.getElementById('productForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Generate ID from name if not editing
+    const id = editingProductId || 
+        document.getElementById('productName').value
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+    
+    // Process images
+    const imagesInput = document.getElementById('productImages').value;
+    const images = imagesInput 
+        ? imagesInput.split(',').map(img => img.trim()).filter(img => img.length > 0)
+        : [];
+    
+    const product = {
+        id: id,
+        name: document.getElementById('productName').value,
+        tagline: document.getElementById('productTagline').value,
+        description: document.getElementById('productDescription').value,
+        detailedDescription: document.getElementById('productDetailedDescription').value,
+        price: document.getElementById('productPrice').value,
+        status: document.getElementById('productStatus').value,
+        total: parseInt(document.getElementById('productTotal').value),
+        available: parseInt(document.getElementById('productAvailable').value),
+        images: images,
+        video: document.getElementById('productVideo').value || '',
+        specifications: {
+            materials: 'Custom materials',
+            construction: 'Precision construction',
+            dimensions: 'Custom dimensions',
+            weight: 'Custom weight',
+            emblemMaterial: 'Premium material',
+            numbering: 'Individually numbered'
+        },
+        customization: {
+            zipperFinish: ['Option 1', 'Option 2'],
+            interiorConfig: ['Standard', 'Custom']
+        }
+    };
+    
+    // Validation
+    if (!product.name || !product.tagline || !product.description) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    const products = JSON.parse(localStorage.getItem('melhem_products') || '[]');
+    
+    if (editingProductId) {
+        // Update existing product
+        const index = products.findIndex(p => p.id === editingProductId);
+        if (index !== -1) {
+            products[index] = product;
+            localStorage.setItem('melhem_products', JSON.stringify(products));
+            alert('Product updated successfully!');
+        }
+    } else {
+        // Check if ID already exists
+        if (products.some(p => p.id === product.id)) {
+            alert('A product with this name already exists. Please use a different name.');
+            return;
+        }
+        
+        // Add new product
+        products.push(product);
+        localStorage.setItem('melhem_products', JSON.stringify(products));
+        alert('Product added successfully!');
+    }
+    
+    // Refresh
+    loadProducts();
+    loadDashboardStats();
+    clearForm();
+});
+        
+        // Orders Management
+        function loadOrders() {
+            const inquiries = JSON.parse(localStorage.getItem('melhem_inquiries') || '[]');
+            const products = JSON.parse(localStorage.getItem('melhem_products') || '[]');
+            const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+            
+            const ordersList = document.getElementById('ordersList');
+            
+            if (inquiries.length === 0) {
+                ordersList.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--color-silver); opacity: 0.5;">
+                        <p>No customer inquiries yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort by date, newest first
+            inquiries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            ordersList.innerHTML = inquiries.map(inquiry => {
+                const product = products.find(p => p.id === inquiry.productId);
+                const productName = product ? product.name : 'Unknown Product';
+                
+                const customer = customers.find(c => c.email === inquiry.customerEmail);
+                const customerName = customer ? customer.name : inquiry.customerName;
+                
+                return `
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-customer">${customerName}</div>
+                                <div class="order-date">${new Date(inquiry.date).toLocaleDateString()}</div>
+                            </div>
+                            <div class="status-badge status-${inquiry.status}">
+                                ${inquiry.status.toUpperCase()}
+                            </div>
+                        </div>
+                        
+                        <div class="order-product">
+                            <strong>Product:</strong> ${productName}
+                        </div>
+                        
+                        ${inquiry.message ? `
+                            <div class="order-message">
+                                <strong>Message:</strong> ${inquiry.message}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="order-status">
+                            <select class="status-select" id="status_${inquiry.id}" onchange="updateInquiryStatus('${inquiry.id}')">
+                                <option value="pending" ${inquiry.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                <option value="reviewed" ${inquiry.status === 'reviewed' ? 'selected' : ''}>Reviewed</option>
+                                <option value="approved" ${inquiry.status === 'approved' ? 'selected' : ''}>Approved</option>
+                                <option value="rejected" ${inquiry.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                            </select>
+                            
+                            <div style="font-size: 0.8rem; color: var(--color-silver);">
+                                ${customerName} • ${customer?.company || 'No company'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function updateInquiryStatus(inquiryId) {
+            const inquiries = JSON.parse(localStorage.getItem('melhem_inquiries') || '[]');
+            const inquiryIndex = inquiries.findIndex(i => i.id === inquiryId);
+            
+            if (inquiryIndex !== -1) {
+                const newStatus = document.getElementById(`status_${inquiryId}`).value;
+                inquiries[inquiryIndex].status = newStatus;
+                localStorage.setItem('melhem_inquiries', JSON.stringify(inquiries));
+                
+                // Also update in customer's inquiries
+                const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+                const customerIndex = customers.findIndex(c => c.email === inquiries[inquiryIndex].customerEmail);
+                
+                if (customerIndex !== -1 && customers[customerIndex].inquiries) {
+                    const customerInquiryIndex = customers[customerIndex].inquiries.findIndex(i => i.id === inquiryId);
+                    if (customerInquiryIndex !== -1) {
+                        customers[customerIndex].inquiries[customerInquiryIndex].status = newStatus;
+                        localStorage.setItem('melhem_customers', JSON.stringify(customers));
+                    }
+                }
+                
+                alert('Status updated successfully!');
+                loadOrders();
+            }
+        }
+        
+        // Customers Management
+        function loadCustomers() {
+            const customers = JSON.parse(localStorage.getItem('melhem_customers') || '[]');
+            const customersList = document.getElementById('customersList');
+            
+            if (customers.length === 0) {
+                customersList.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--color-silver); opacity: 0.5;">
+                        <p>No registered customers yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            customersList.innerHTML = customers.map(customer => `
+                <div class="customer-item">
+                    <div class="customer-header">
+                        <div class="customer-name">${customer.name}</div>
+                        <div class="status-badge" style="background: rgba(76,175,80,0.1); color: #81c784; border: 1px solid #4caf50;">
+                            ${customer.status || 'active'}
+                        </div>
+                    </div>
+                    
+                    <div class="customer-email">${customer.email}</div>
+                    
+                    ${customer.company ? `
+                        <div class="customer-info">
+                            <strong>Company:</strong> ${customer.company}
+                        </div>
+                    ` : ''}
+                    
+                    ${customer.title ? `
+                        <div class="customer-info">
+                            <strong>Title:</strong> ${customer.title}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="customer-info">
+                        <strong>Registered:</strong> ${new Date(customer.registrationDate).toLocaleDateString()}
+                    </div>
+                    
+                    <div class="customer-stats">
+                        <div class="customer-stat">
+                            <div class="stat-count">${customer.inquiries ? customer.inquiries.length : 0}</div>
+                            <div class="stat-label-small">Inquiries</div>
+                        </div>
+                        
+                        <div class="customer-stat">
+                            <div class="stat-count">${
+                                customer.inquiries ? 
+                                customer.inquiries.filter(i => i.status === 'approved').length : 0
+                            }</div>
+                            <div class="stat-label-small">Approved</div>
+                        </div>
+                        
+                        <div class="customer-stat">
+                            <div class="stat-count">${
+                                customer.inquiries ? 
+                                customer.inquiries.filter(i => i.status === 'pending').length : 0
+                            }</div>
+                            <div class="stat-label-small">Pending</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Settings
+        function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!newPassword || !confirmPassword) {
+                alert('Please enter and confirm the new password');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            // In a real app, you would update the password hash
+            // For this demo, we'll just show a message
+            alert('Password updated successfully!');
+            
+            // Clear fields
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+        
+        function exportData() {
+            const data = {
+                products: JSON.parse(localStorage.getItem('melhem_products') || '[]'),
+                customers: JSON.parse(localStorage.getItem('melhem_customers') || '[]'),
+                inquiries: JSON.parse(localStorage.getItem('melhem_inquiries') || '[]'),
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `melhem_data_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('Data exported successfully!');
+        }
+        
+        // Initialize
+        updateImagePreview();
+    </script>
+</body>
+</html>
